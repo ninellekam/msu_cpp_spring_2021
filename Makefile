@@ -1,17 +1,17 @@
 CC = g++
 FLAGS = -std=c++11 -Wall -Wextra -Werror -g
 
-all: test.o allocator.o
-	$(CC) test.o allocator.o -o run
+all: main.o allocator.o test.o
+	$(CC) main.o test.o allocator.o -o run
 
-test.o: test.cpp test.hpp
-	g++ -c test.cpp
+main.o: main.cpp test.hpp
+	g++ -c main.cpp
 
 allocator.o: allocator.cpp allocator.hpp
 	$(CC) -c allocator.cpp
 
-clean:
-	rm -f *.o run
+test.o: test.cpp test.hpp
+	g++ -c test.cpp
 
-.PHONY:
-	clean all
+clean:
+	rm -f *.o
