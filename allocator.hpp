@@ -27,7 +27,6 @@ Allocator::Allocator(size_t size) {
 
 void Allocator::information() {
 	std::cout << "Size Of memory:  " << (size_t)(ptr - current_ptr_size) << std::endl;
-	//std::cout << "Start pointer:  " << (size_t)ptr_begin << std::endl;
 	std::cout << "Current pointer adress:  " << (size_t)(current_ptr_size) << std::endl;
 	std::cout << "The rest of the memory:  " << (size_t)(ptr - current_ptr_size) << std::endl;
 	std::cout << "Current pointer:  " << (size_t)(current_ptr_size) << std::endl;
@@ -43,15 +42,12 @@ void Allocator::makeAllocator(size_t max) {
 }
 
 char* Allocator::alloc(size_t size) {
-	std::cout << "size\n";
 	if (size)
 		return (NULL);
 	if (size > maxSize - current_ptr_size || ptr == NULL)
 		return (NULL);
-	std::cout << "B\n";
 	current_ptr_size += size;
 	size_t offset = current_ptr_size - size;
-		std::cout << "C\n";
 	if (offset < 0 )
 		return (NULL);
 	if (ptr + offset != NULL)
