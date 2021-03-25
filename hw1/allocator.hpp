@@ -9,16 +9,16 @@
 class Allocator
 {
 private:
-	char *ptr_end;
+	char *end;
 	size_t maxSize;
-	char *ptr_curr;
-	char *ptr_begin;
+	char *curr;
+	char *begin;
 public:
 	Allocator(size_t size);
     void makeAllocator(size_t maxSize);
     char* alloc(size_t size);
     void reset();
-	void information();
+	void check();
 	~Allocator();
 };
 
