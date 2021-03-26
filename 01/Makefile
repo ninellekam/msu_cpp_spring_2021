@@ -25,6 +25,7 @@ clean:
 fclean:
 	rm -f *.o
 	rm run
+	rm test
 
 .PHONY:
 	clean all fclean
