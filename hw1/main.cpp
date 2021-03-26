@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
  				size = 0;
  				std::cin >> size;
  				if (alloc.alloc(size) == NULL)
-				std::cout << "------------- ERROR!!! --------------" << size << "\n";
+				std::cout << "------------- ERROR!!! --------------  " << size << "\n";
 				alloc.check();
  			}
  			if (s == "reset") {
