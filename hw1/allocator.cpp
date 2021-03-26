@@ -1,10 +1,5 @@
 #include "allocator.hpp"
 
-Allocator::Allocator(size_t size) {
-	maxSize = size;
-	makeAllocator(size);
-}
-
 void Allocator::check() {
 	std::cout <<"-------------\n";
 	std::cout << "Memory size:  " << (size_t)(end - begin) << std::endl;
@@ -12,19 +7,21 @@ void Allocator::check() {
 	std::cout << "Remaining memory size:  " << (size_t)(end - curr) << std::endl;
 	std::cout << "Current pointer:  " << (size_t)(curr - begin) << std::endl;
 	std::cout <<"-------------\n";
+	return ;
 }
 
 void Allocator::makeAllocator(size_t max) {
+	maxSize = max;
+	assert(max > 0);
 	if (maxSize > 0)
 		begin = new char[maxSize];
-	if (!begin || max <= 0)
-		std::cout << "makeAlloccator ERROR!\n";
 	curr = begin;
 	end = begin + maxSize;
+	return ;
 }
 
 char* Allocator::alloc(size_t size) {
-	if (!size)
+	if (size < 0 || maxSize <= 0)
 		return (NULL);
 	curr += size;
 	if (curr > end) {
@@ -36,6 +33,11 @@ char* Allocator::alloc(size_t size) {
 
 void Allocator::reset() {
 	curr = begin;
+	return ;
+}
+
+size_t Allocator::getCurrPtr() {
+	return ((size_t)(curr - begin));
 }
 
 Allocator::~Allocator() {

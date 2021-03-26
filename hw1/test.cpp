@@ -1,39 +1,57 @@
 #include "test.hpp"
 #include <iostream>
 #include "allocator.hpp"
+#include <cassert>
+
+void DefaultTest() {
+	Allocator alloc;
+	alloc.makeAllocator(1000);
+	char *ptr = alloc.alloc(200);
+	assert(ptr != NULL);
+	assert(alloc.getCurrPtr() == 200);
+	alloc.check();
+}
+
+void LimitTest() {
+	Allocator alloc;
+	alloc.makeAllocator(1000);
+	char *ptr = alloc.alloc(1000);
+	assert(ptr != NULL);
+	assert(alloc.getCurrPtr() == 1000);
+	alloc.check();
+}
+
+void ResetTest() {
+	Allocator alloc;
+	alloc.makeAllocator(1024);
+	char *ptr = alloc.alloc(125);
+	assert(alloc.getCurrPtr() == 125);
+	assert(ptr != NULL);
+	alloc.reset();
+	ptr = alloc.alloc(516);
+	assert(ptr != NULL);
+	assert(alloc.getCurrPtr() == 516);
+	alloc.check();
+}
+
+void OverFlowTest() {
+	Allocator alloc;
+	alloc.makeAllocator(1024);
+	char *ptr = alloc.alloc(1000);
+	assert(alloc.getCurrPtr() == 1000);
+	ptr = alloc.alloc(25);
+	assert(alloc.getCurrPtr() == 1000);
+	alloc.check();
+}
 
 void test() {
-	Allocator a(100);
-	a.check();
-
-	if(a.alloc(20))
-		a.check();
-	else
-		std::cout << "\nERROR! 20" << std::endl;
-
-	if(a.alloc(30) != NULL)
-		a.check();
-	else
-		std::cout << "\nERROR! 30" << std::endl;
-
-	std::cout << "\nAfter reset()!\n";
-	a.reset();
-	a.check();
-
-	if(a.alloc(256))
-		a.check();
-	else
-		std::cout << "ERROR! 256 " << std::endl;
-
-	if(a.alloc(1024))
-		a.check();
-	else
-		std::cout << "ERROR! 1024" << std::endl;
-
-	if(a.alloc(35))
-		a.check();
-	else
-		std::cout << "ERROR! 256" << std::endl;
-
+	DefaultTest();
+	std::cout << "Succes DefaultTest\n";
+	LimitTest();
+	std::cout << "Succes LimitTest\n";
+	ResetTest();
+	std::cout << "Succes ResetTest\n";
+	OverFlowTest();
+	std::cout << "Succes OverFlowTest\n";
 	return ;
 }
