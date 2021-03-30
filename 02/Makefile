@@ -13,7 +13,7 @@ test: TokenParser.o test.o
 TokenParser.o: TokenParser.cpp TokenParser.hpp
 	@$(CC) -c $(FLAGS) TokenParser.cpp
 
-test.o: test.cpp
+test.o: test.cpp test.hpp
 	@$(CC) -c $(FLAGS) test.cpp
 
 clean:

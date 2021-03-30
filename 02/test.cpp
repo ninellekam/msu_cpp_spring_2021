@@ -1,5 +1,4 @@
-#include "TokenParser.hpp"
-#include <cassert>
+#include "test.hpp"
 
 void test_1() {
 	TokenParser TokenParser;

@@ -34,9 +34,9 @@ bool	ft_isdigit(char c) {
 
 void TokenParser::TParser(const std::string & text) {
 	start_callback();
-	std::string token;
+	std::string	token;
 	auto it = text.begin();
-	int n_digit = 0;
+	int	n_digit = 0;
 
 	while (it != text.end()) {
 		while (!ft_isspace(*it) && it != text.end()) {
