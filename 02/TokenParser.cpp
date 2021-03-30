@@ -25,9 +25,7 @@ void TokenParser::SetEndCallback(StartEndCallback end_cb) {
 }
 
 bool	ft_isspace(char c) {
-	return (c == ' ' ||
-			c == '\n' ||
-			c == '\t');
+	return (c == ' ' || c == '\n' || c == '\t');
 }
 
 bool	ft_isdigit(char c) {
