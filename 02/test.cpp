@@ -1,83 +1,83 @@
-#include "parser.hpp"
+#include "TokenParser.hpp"
 #include <cassert>
 
 void test_1() {
-	Parser parser;
-	size_t n_digits = 0;
-	size_t n_strings = 0;
-	std::string text = "string 12345 123 123nodigit 987654321 no123digit456 54321";
+	TokenParser TokenParser;
+	size_t count_digits = 0;
+	size_t count_strings = 0;
+	std::string text = "Hello 12345 123 123techo 777 msu666spring456 345543";
 
-	parser.set_digit_callback([&n_digits](const std::string & token){ n_digits++; });
-	parser.set_string_callback([&n_strings](const std::string & token){ n_strings++; });
-	parser.parse(text);
-	assert(n_digits == 4 and n_strings == 3);
+	TokenParser.SetDigitCallback([&count_digits](const std::string & token){ count_digits++; });
+	TokenParser.SetStringCallback([&count_strings](const std::string & token){ count_strings++; });
+	TokenParser.TParser(text);
+	assert(count_digits == 4 and count_strings == 3);
 }
 
 void test_2() {
-	Parser parser;
+	TokenParser TokenParser;
 	std::string str;
 	std::string digit_str;
-	std::string text = "string \t\n \n 12345\n \t\t\t\n\n\n\n\n \t\n\t\n";
+	std::string text = "MsuCppSpring \t\n \n 20202021\n \t\t\t\n\n\n\n\n \t\n\t\n";
 
-	parser.set_digit_callback([&](const std::string & token){ digit_str += token; });
-	parser.set_string_callback([&](const std::string & token){ str += token; });
-	parser.parse(text);
-	assert(digit_str == "12345" and str == "string");
+	TokenParser.SetDigitCallback([&](const std::string & token){ digit_str += token; });
+	TokenParser.SetStringCallback([&](const std::string & token){ str += token; });
+	TokenParser.TParser(text);
+	assert(digit_str == "20202021" and str == "MsuCppSpring");
 }
 
 void test_3() {
-	Parser parser;
-	size_t n_digits = 0;
-	size_t n_strings = 0;
-	std::string text = "string 12345 123nodigit\n";
+	TokenParser TokenParser;
+	size_t count_digits = 0;
+	size_t count_strings = 0;
+	std::string text = "TestNumberThree 12345 123ByNinaKamkia\n";
 
-	parser.set_digit_callback([&n_digits](const std::string & token){ n_digits++; });
-	parser.set_string_callback([&n_strings](const std::string & token){ n_strings++; });
-	parser.parse(text);
-	assert(n_digits == 1 and n_strings == 2);
+	TokenParser.SetDigitCallback([&count_digits](const std::string & token){ count_digits++; });
+	TokenParser.SetStringCallback([&count_strings](const std::string & token){ count_strings++; });
+	TokenParser.TParser(text);
+	assert(count_digits == 1 and count_strings == 2);
 }
 
 void test_4() {
-	Parser parser;
+	TokenParser TokenParser;
 	std::string str;
 	std::string digit_str;
 	std::string text = "string 12345 123nodigit\n\n \n\t\n \n \n \n n\n\n";
 
-	parser.set_digit_callback([&](const std::string & token){ digit_str += token; });
-	parser.set_string_callback([&](const std::string & token){ str += token; });
-	parser.parse(text);
+	TokenParser.SetDigitCallback([&](const std::string & token){ digit_str += token; });
+	TokenParser.SetStringCallback([&](const std::string & token){ str += token; });
+	TokenParser.TParser(text);
 	assert(digit_str == "12345" and str == "string123nodigitn");
 }
 
 void test_5() {
-	Parser parser;
+	TokenParser TokenParser;
 	bool started = false;
 	bool ended = false;
-	std::string check;
-	std::string text = "string 12345 123nodigit\n\t\n 1234\n 123456789 \n";
+	std::string str_fot_test;
+	std::string text = "Mail.RU GROUP 2020 2021 Spring\n\t\n CPP\n DEEP \n";
 
-	parser.set_start_callback([&started](){ started = true; });
-	parser.set_digit_callback([&check](const std::string & token){ check.push_back('1'); });
-	parser.set_string_callback([&check](const std::string & token){ check.push_back('0'); });
-	parser.set_end_callback([&ended](){ ended = true; });
-	parser.parse(text);
-	assert(check == std::string("01011") and started and ended);
+	TokenParser.SetStartCallback([&str_fot_test](){ str_fot_test += "start";});
+	TokenParser.SetDigitCallback([&str_fot_test](const std::string & token){ str_fot_test.push_back('1'); });
+	TokenParser.SetStringCallback([&str_fot_test](const std::string & token){ str_fot_test.push_back('0'); });
+	TokenParser.SetEndCallback([&str_fot_test](){ str_fot_test += "end"; });
+	TokenParser.TParser(text);
+	assert(str_fot_test == std::string("start0011000end"));
 }
 
 void test_6() {
-	Parser parser;
+	TokenParser TokenParser;
 	bool started = false;
 	bool ended = false;
-	std::string check;
+	std::string str_fot_test;
 	std::string text = "string 12345 123nodigit\n\t\n 1234\n \n123456789 \n";
 
-	parser.set_start_callback([&started](){ started = true; });
-	parser.set_digit_callback([&check](const std::string & token){ check+=token; });
-	parser.set_string_callback([&check](const std::string & token){ check+=token; });
-	parser.set_end_callback([&ended](){ ended = true; });
-	parser.parse(text);
+	TokenParser.SetStartCallback([&str_fot_test](){ str_fot_test += "Start";});
+	TokenParser.SetDigitCallback([&str_fot_test](const std::string & token){ str_fot_test+=token; });
+	TokenParser.SetStringCallback([&str_fot_test](const std::string & token){ str_fot_test+=token; });
+	TokenParser.SetEndCallback([&str_fot_test](){ str_fot_test += "End";});
+	TokenParser.TParser(text);
 
-	assert(check == std::string("string12345123nodigit1234123456789") and started and ended);
+	assert(str_fot_test == std::string("Startstring12345123nodigit1234123456789End"));
 }
 
 int main() {

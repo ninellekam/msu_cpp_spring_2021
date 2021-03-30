@@ -1,5 +1,5 @@
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef TOKEN_PARSER_HPP
+#define TOKEN_PARSER_HPP
 #include <iostream>
 #include <functional>
 #include <string>
@@ -7,7 +7,7 @@
 using TokenCallback = std::function<void(const std::string & token)>;
 using StartEndCallback = std::function<void()>;
 
-class Parser {
+class TokenParser {
 private:
 	StartEndCallback start_callback;
 	TokenCallback digit_callback;
@@ -18,20 +18,19 @@ private:
 	bool digit_is = true;
 
 public:
-	Parser();
-	void set_start_callback(StartEndCallback start_cb);
-	void set_digit_callback(TokenCallback digit_cb);
-	void set_string_callback(TokenCallback string_cb);
-	void set_end_callback(StartEndCallback end_cb);
-	void parse(const std::string & text);
-	void token_processing(std::string & token, bool & digit);
+	TokenParser();
+	void SetStartCallback(StartEndCallback start_cb);
+	void SetDigitCallback(TokenCallback digit_cb);
+	void SetStringCallback(TokenCallback string_cb);
+	void SetEndCallback(StartEndCallback end_cb);
+	void TParser(const std::string & text);
 };
 
 #endif
-// class TokenParser
+// class TokenTokenParser
 // {
 // public:
-// 	TokenParser() = default;
+// 	TokenTokenParser() = default;
 // 	SetStartCallback(...);
 // 	SetEndCallback(...);
 // 	SetDigitTokenCallback(...);

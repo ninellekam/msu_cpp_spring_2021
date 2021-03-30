@@ -3,15 +3,15 @@ FLAGS = -std=c++17 -g
 
 re: all
 
-all: parser.o test.o
-	@$(CC) parser.o test.o -o run
+all: TokenParser.o test.o
+	@$(CC) TokenParser.o test.o -o run
 
-test: parser.o test.o
-	@$(CC) parser.o test.o -o test
+test: TokenParser.o test.o
+	@$(CC) TokenParser.o test.o -o test
 	@./test
 
-parser.o: parser.cpp parser.hpp
-	@$(CC) -c $(FLAGS) parser.cpp
+TokenParser.o: TokenParser.cpp TokenParser.hpp
+	@$(CC) -c $(FLAGS) TokenParser.cpp
 
 test.o: test.cpp
 	@$(CC) -c $(FLAGS) test.cpp
