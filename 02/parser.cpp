@@ -63,14 +63,3 @@ void Parser::parse(const std::string & text) {
 	}
 	end_callback();
 }
-
-// void Parser::token_processing(std::string &token, bool &digit) {
-// 	if(token.size() != 0) {
-// 		if (digit)
-// 			digit_callback(token);
-// 		else
-// 			string_callback(token);
-// 		token.clear();
-// 		digit = true;
-// 	}
-// }

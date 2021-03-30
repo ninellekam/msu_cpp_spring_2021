@@ -49,7 +49,7 @@ void test_4() {
 	assert(digit_str == "12345" and str == "string123nodigitn");
 }
 
-void test_6() {
+void test_5() {
 	Parser parser;
 	bool started = false;
 	bool ended = false;
@@ -64,7 +64,7 @@ void test_6() {
 	assert(check == std::string("01011") and started and ended);
 }
 
-void test_7() {
+void test_6() {
 	Parser parser;
 	bool started = false;
 	bool ended = false;
@@ -89,9 +89,9 @@ int main() {
 	std::cout << "test_3 " << "OK" << std::endl;
 	test_4();
 	std::cout << "test_4 " << "OK" << std::endl;
+	test_5();
+	std::cout << "test_5 " << "OK" << std::endl;
 	test_6();
 	std::cout << "test_6 " << "OK" << std::endl;
-	test_7();
-	std::cout << "test_7 " << "OK" << std::endl;
 	return 0;
 }
