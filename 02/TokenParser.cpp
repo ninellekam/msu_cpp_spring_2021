@@ -1,6 +1,5 @@
 #include "TokenParser.hpp"
 
-
 TokenParser::TokenParser() {
 	start_callback = [](){};
 	digit_callback = [](const std::string & token) {};
