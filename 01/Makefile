@@ -6,7 +6,7 @@ re: all
 all: main.o allocator.o test.o
 	@$(CC) main.o test.o allocator.o -o run
 
-test: main.o test.o
+test: main.o allocator.o test.o
 	@$(CC) main.o test.o allocator.o -o test
 	@./test
 

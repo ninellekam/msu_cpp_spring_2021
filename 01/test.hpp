@@ -12,5 +12,7 @@
 	void NegativeTest();
 	void ResizeTest();
 	void DoublingTest();
-	
+	void BeforeTest();
+	void TheBorderTest();
+
 #endif

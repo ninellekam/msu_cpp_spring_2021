@@ -20,20 +20,18 @@ Allocator::Allocator() {
 void Allocator::makeAllocator(size_t max) {
 	maxSize = max;
 	assert(max > 0);
-	if (maxSize > 0) {
-		if (begin != nullptr) {
-			delete [] begin;
-			begin = nullptr;
-		}
-		begin = new char[maxSize];
+	if (begin != nullptr) {
+		delete [] begin;
+		begin = nullptr;
 	}
+	begin = new char[maxSize];
 	curr = begin;
 	end = begin + maxSize;
 	return ;
 }
 
 char* Allocator::alloc(size_t size) {
-	if (size < 0 || maxSize <= 0)
+	if (maxSize == 0)
 		return (nullptr);
 	curr += size;
 	if (curr > end) {
