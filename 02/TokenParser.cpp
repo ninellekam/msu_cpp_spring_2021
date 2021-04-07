@@ -8,19 +8,23 @@ TokenParser::TokenParser() {
 }
 
 void TokenParser::SetStartCallback(StartEndCallback start_cb = nullptr) {
-	start_callback = start_cb;
+	if (start_cb != nullptr)
+		start_callback = start_cb;
 }
 
 void TokenParser::SetDigitCallback(TokenDigitCallback digit_cb) {
-	digit_callback = digit_cb;
+	if (digit_cb != nullptr)
+		digit_callback = digit_cb;
 }
 
 void TokenParser::SetStringCallback(TokenCallback string_cb) {
-	string_callback = string_cb;
+	if (string_cb != nullptr)
+		string_callback = string_cb;
 }
 
 void TokenParser::SetEndCallback(StartEndCallback end_cb) {
-	end_callback = end_cb;
+	if (end_cb != nullptr)
+		end_callback = end_cb;
 }
 
 bool	ft_isspace(char c) {

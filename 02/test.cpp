@@ -235,12 +235,34 @@ void test_one_symbol() {
 	assertVector(string_found_tokens, string_expected_tokens);
 }
 
+void test_nullptr_callback() {
+	TokenParser TokenParser;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	integer_found_tokens.reserve(0);
+	string_found_tokens.reserve(4);
+	TokenParser.SetStartCallback(nullptr);
+	TokenParser.SetEndCallback([](){});
+	TokenParser.SetDigitCallback(nullptr);
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser("a b c d 1 2 3 4 5");
+
+	std::vector<uint32_t> integer_expected_tokens = {};
+	std::vector<std::string> string_expected_tokens = {"a", "b", "c", "d"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+}
+
 int main() {
 	std::cout << "-------- C A L L B A C K S -------\n";
 	test_without_callback();
 	std::cout << "test_without_callback		OK\n";
 	test_two_same_callbacks();
 	std::cout << "test_two_same_callbacks is	OK\n";
+	test_nullptr_callback();
+	std::cout << "test_nullptr_callback is	OK\n";
 
 	std::cout << "------------ D I G I T -----------\n";
 	test_with_only_digit_tokens();
