@@ -12,10 +12,10 @@ using					StartEndCallback = std::function<void()>;
 
 class					TokenParser {
 private:
-	StartEndCallback	start_callback;
+	StartEndCallback		start_callback;
 	TokenDigitCallback		digit_callback;
-	TokenCallback		string_callback;
-	StartEndCallback	end_callback;
+	TokenCallback			string_callback;
+	StartEndCallback		end_callback;
 	bool				digit_is = true;
 public:
 	TokenParser();
