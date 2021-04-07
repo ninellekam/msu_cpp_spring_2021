@@ -2,16 +2,16 @@
 
 TokenParser::TokenParser() {
 	start_callback = [](){};
-	digit_callback = [](const std::string & token) {};
+	digit_callback = [](uint32_t & token) {};
 	string_callback = [](const std::string & token) {};
 	end_callback = [](){};
 }
 
-void TokenParser::SetStartCallback(StartEndCallback start_cb) {
+void TokenParser::SetStartCallback(StartEndCallback start_cb = nullptr) {
 	start_callback = start_cb;
 }
 
-void TokenParser::SetDigitCallback(TokenCallback digit_cb) {
+void TokenParser::SetDigitCallback(TokenDigitCallback digit_cb) {
 	digit_callback = digit_cb;
 }
 
@@ -24,7 +24,7 @@ void TokenParser::SetEndCallback(StartEndCallback end_cb) {
 }
 
 bool	ft_isspace(char c) {
-	return (c == ' ' || c == '\n' || c == '\t');
+	return (c == ' ' || c == '\n' || c == '\t' || c == '\v');
 }
 
 bool	ft_isdigit(char c) {
@@ -35,7 +35,6 @@ void TokenParser::TParser(const std::string & text) {
 	start_callback();
 	std::string	token;
 	auto it = text.begin();
-	int	n_digit = 0;
 
 	while (it != text.end()) {
 		while (!ft_isspace(*it) && it != text.end()) {
@@ -48,8 +47,17 @@ void TokenParser::TParser(const std::string & text) {
 		while (ft_isspace(*it) && it != text.end())
 			++it;
 		--it;
+		if (token == "")
+				break;
 		if (digit_is == true) {
-			digit_callback(token);
+			unsigned long long dig;
+			char * pEnd;
+			dig = strtoull(token.c_str(), &pEnd, 10);
+			uint32_t d = dig;
+			if (dig > 446744073709551615)
+				string_callback(token);
+			else
+				digit_callback(d);
 		}
 		else
 			string_callback(token);

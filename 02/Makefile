@@ -4,7 +4,7 @@ FLAGS = -std=c++17 -g
 re: all
 
 all: TokenParser.o test.o
-	@$(CC) TokenParser.o test.o -o run
+	@$(CC) TokenParser.o test.o
 
 test: TokenParser.o test.o
 	@$(CC) TokenParser.o test.o -o test
@@ -20,9 +20,8 @@ clean:
 	rm -f *.o
 
 fclean:
-	rm -f *.o
-	rm run
-	rm test
+	@rm -f *.o
+	@rm test
 
 .PHONY:
 	clean all fclean

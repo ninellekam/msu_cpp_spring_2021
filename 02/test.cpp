@@ -1,96 +1,268 @@
 #include "test.hpp"
+#include <vector>
+#include <iostream>
 
-void test_1() {
-	TokenParser TokenParser;
-	size_t count_digits = 0;
-	size_t count_strings = 0;
-	std::string text = "Hello 12345 123 123techo 777 msu666spring456 345543";
+#include <cassert>
 
-	TokenParser.SetDigitCallback([&count_digits](const std::string & token){ count_digits++; });
-	TokenParser.SetStringCallback([&count_strings](const std::string & token){ count_strings++; });
-	TokenParser.TParser(text);
-	assert(count_digits == 4 and count_strings == 3);
+template <typename T>
+void assertVector(const std::vector<T> &generated, const std::vector<T> &expected) {
+	assert(generated.size() == expected.size());
+	assert(std::equal(generated.begin(), generated.end(), expected.begin()));
 }
 
-void test_2() {
-	TokenParser TokenParser;
+void test_without_callback()
+{
+	TokenParser	TokenParser;
+	TokenParser.TParser("abc def 123    678    agsj");
+}
+
+void test_all()
+{
 	std::string str;
-	std::string digit_str;
-	std::string text = "MsuCppSpring \t\n \n 20202021\n \t\t\t\n\n\n\n\n \t\n\t\n";
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	TokenParser TokenParser;
+	integer_found_tokens.reserve(2);
+	string_found_tokens.reserve(5);
+	TokenParser.SetStartCallback([&str](){str += "Start";});
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetDigitCallback([&integer_found_tokens](uint32_t digitToken) {
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser("jfajfa7873831318##$$!@!$!    \
+			+14 -15 15 3218713     \
+			jjHSHJAskAKSK12Q@!@");
 
-	TokenParser.SetDigitCallback([&](const std::string & token){ digit_str += token; });
-	TokenParser.SetStringCallback([&](const std::string & token){ str += token; });
-	TokenParser.TParser(text);
-	assert(digit_str == "20202021" and str == "MsuCppSpring");
+	std::vector<uint32_t> integer_expected_tokens = {15, 3218713};
+	std::vector<std::string> string_expected_tokens = {
+	"jfajfa7873831318##$$!@!$!", "+14", "-15", "jjHSHJAskAKSK12Q@!@"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "StartEnd");
 }
 
-void test_3() {
-	TokenParser TokenParser;
-	size_t count_digits = 0;
-	size_t count_strings = 0;
-	std::string text = "TestNumberThree 12345 123ByNinaKamkia\n";
-
-	TokenParser.SetDigitCallback([&count_digits](const std::string & token){ count_digits++; });
-	TokenParser.SetStringCallback([&count_strings](const std::string & token){ count_strings++; });
-	TokenParser.TParser(text);
-	assert(count_digits == 1 and count_strings == 2);
-}
-
-void test_4() {
-	TokenParser TokenParser;
+void test_string_tabs()
+{
 	std::string str;
-	std::string digit_str;
-	std::string text = "string 12345 123nodigit\n\n \n\t\n \n \n \n n\n\n";
-
-	TokenParser.SetDigitCallback([&](const std::string & token){ digit_str += token; });
-	TokenParser.SetStringCallback([&](const std::string & token){ str += token; });
-	TokenParser.TParser(text);
-	assert(digit_str == "12345" and str == "string123nodigitn");
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	TokenParser TokenParser;
+	integer_found_tokens.reserve(0);
+	string_found_tokens.reserve(0);
+	TokenParser.SetStartCallback([&str](){str += "Start";});
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetDigitCallback([&integer_found_tokens](uint32_t digitToken) {
+	integer_found_tokens.push_back(digitToken);
+	std::cout << digitToken;
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser("   \t    \t\n");
+	std::vector<uint32_t> integer_expected_tokens = {};
+	std::vector<std::string> string_expected_tokens = {};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "StartEnd");
 }
 
-void test_5() {
+void test_with_only_string_tokens()
+{
+	std::string str;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
 	TokenParser TokenParser;
-	bool started = false;
-	bool ended = false;
-	std::string str_fot_test;
-	std::string text = "Mail.RU GROUP 2020 2021 Spring\n\t\n CPP\n DEEP \n";
+	integer_found_tokens.reserve(4);
+	string_found_tokens.reserve(5);
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) { str += "1"; integer_found_tokens.push_back(digitToken); });
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) { string_found_tokens.push_back(stringToken); });
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) { str += "2"; integer_found_tokens.push_back(digitToken); });
+	TokenParser.TParser("jfajfa7873831318##$$!@!$!    \
+			+14 -15 15 3218713     \
+			jjHSHJAskAKSK12 1222 5555 Q@!@");
 
-	TokenParser.SetStartCallback([&str_fot_test](){ str_fot_test += "start";});
-	TokenParser.SetDigitCallback([&str_fot_test](const std::string & token){ str_fot_test.push_back('1'); });
-	TokenParser.SetStringCallback([&str_fot_test](const std::string & token){ str_fot_test.push_back('0'); });
-	TokenParser.SetEndCallback([&str_fot_test](){ str_fot_test += "end"; });
-	TokenParser.TParser(text);
-	assert(str_fot_test == std::string("start0011000end"));
+	std::vector<uint32_t> integer_expected_tokens = {15, 3218713, 1222, 5555};
+	std::vector<std::string> string_expected_tokens = {
+	"jfajfa7873831318##$$!@!$!", "+14", "-15", "jjHSHJAskAKSK12", "Q@!@"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "2222End");
 }
 
-void test_6() {
+void test_with_only_digit_tokens()
+{
+	std::string str;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
 	TokenParser TokenParser;
-	bool started = false;
-	bool ended = false;
-	std::string str_fot_test;
-	std::string text = "string 12345 123nodigit\n\t\n 1234\n \n123456789 \n";
+	integer_found_tokens.reserve(3);
+	string_found_tokens.reserve(0);
+	TokenParser.SetStartCallback([&str](){str += "Start";});
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) { string_found_tokens.push_back(stringToken); });
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) { integer_found_tokens.push_back(digitToken); });
+	TokenParser.TParser("25 \t\v\t    \n  778234 1273134");
+	std::vector<uint32_t> integer_expected_tokens = {25, 778234, 1273134};
+	std::vector<std::string> string_expected_tokens = {};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "StartEnd");
+}
 
-	TokenParser.SetStartCallback([&str_fot_test](){ str_fot_test += "Start";});
-	TokenParser.SetDigitCallback([&str_fot_test](const std::string & token){ str_fot_test+=token; });
-	TokenParser.SetStringCallback([&str_fot_test](const std::string & token){ str_fot_test+=token; });
-	TokenParser.SetEndCallback([&str_fot_test](){ str_fot_test += "End";});
-	TokenParser.TParser(text);
+void test_with_no_start()
+{
+	std::string str;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	TokenParser TokenParser;
+	integer_found_tokens.reserve(3);
+	string_found_tokens.reserve(0);
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) { string_found_tokens.push_back(stringToken); });
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) {integer_found_tokens.push_back(digitToken); });
+	TokenParser.TParser("25 \t\v\t    \n  778234 1273134");
+	std::vector<uint32_t> integer_expected_tokens = {25, 778234, 1273134};
+	std::vector<std::string> string_expected_tokens = {};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "End");
+}
 
-	assert(str_fot_test == std::string("Startstring12345123nodigit1234123456789End"));
+void test_two_same_callbacks()
+{
+	std::string str;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	TokenParser TokenParser;
+	integer_found_tokens.reserve(4);
+	string_found_tokens.reserve(5);
+	TokenParser.SetStartCallback([&str](){str += "Start";});
+	TokenParser.SetEndCallback([&str](){str += "End";});
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) {
+	str += "1";
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(stringToken);
+	//std::cout << stringToken << " ";
+	});
+	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) {
+	str += "2";
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.TParser("jfajfa7873831318##$$!@!$!    \
+			+14 -15 15 3218713     \
+			jjHSHJAskAKSK12 1222 5555 Q@!@");
+
+	std::vector<uint32_t> integer_expected_tokens = {15, 3218713, 1222, 5555};
+	std::vector<std::string> string_expected_tokens = {
+	"jfajfa7873831318##$$!@!$!", "+14", "-15", "jjHSHJAskAKSK12", "Q@!@"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+	assert(str == "Start2222End");
+}
+
+void test_overflow() {
+	TokenParser TokenParser;
+	std::string input("hello mail.ru 12 446744073709551616 125 7777 1818181818181818181811818 \
+			@#$kkoooklsffsf stainherfS     \
+	");
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	integer_found_tokens.reserve(3);
+	string_found_tokens.reserve(6);
+	TokenParser.SetStartCallback([](){});
+	TokenParser.SetEndCallback([](){});
+	TokenParser.SetDigitCallback([&integer_found_tokens](uint32_t digitToken) {
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser(input);
+
+	std::vector<uint32_t> integer_expected_tokens = {12, 125, 7777};
+	std::vector<std::string> string_expected_tokens = {
+	"hello", "mail.ru", "446744073709551616", "1818181818181818181811818", "@#$kkoooklsffsf", "stainherfS"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+}
+
+void test_empty_string() {
+	TokenParser TokenParser;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	integer_found_tokens.reserve(0);
+	string_found_tokens.reserve(0);
+	TokenParser.SetStartCallback([](){});
+	TokenParser.SetEndCallback([](){});
+	TokenParser.SetDigitCallback([&integer_found_tokens](uint32_t digitToken) {
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser("");
+
+	std::vector<uint32_t> integer_expected_tokens = {};
+	std::vector<std::string> string_expected_tokens = {};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
+}
+
+void test_one_symbol() {
+	TokenParser TokenParser;
+	std::vector<uint32_t> integer_found_tokens;
+	std::vector<std::string> string_found_tokens;
+	integer_found_tokens.reserve(5);
+	string_found_tokens.reserve(4);
+	TokenParser.SetStartCallback([](){});
+	TokenParser.SetEndCallback([](){});
+	TokenParser.SetDigitCallback([&integer_found_tokens](uint32_t digitToken) {
+	integer_found_tokens.push_back(digitToken);
+	});
+	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
+	string_found_tokens.push_back(std::move(stringToken));
+	});
+	TokenParser.TParser("a b c d 1 2 3 4 5");
+
+	std::vector<uint32_t> integer_expected_tokens = {1, 2, 3, 4, 5};
+	std::vector<std::string> string_expected_tokens = {"a", "b", "c", "d"};
+	assertVector(integer_found_tokens, integer_expected_tokens);
+	assertVector(string_found_tokens, string_expected_tokens);
 }
 
 int main() {
-	test_1();
-	std::cout << "test_1 " <<"OK" << std::endl;
-	test_2();
-	std::cout << "test_2 " << "OK" << std::endl;
-	test_3();
-	std::cout << "test_3 " << "OK" << std::endl;
-	test_4();
-	std::cout << "test_4 " << "OK" << std::endl;
-	test_5();
-	std::cout << "test_5 " << "OK" << std::endl;
-	test_6();
-	std::cout << "test_6 " << "OK" << std::endl;
+	std::cout << "------------ T E S T S -----------\n";
+	test_without_callback();
+	std::cout << "test_without_callback		OK\n";
+	test_two_same_callbacks();
+	std::cout << "test_two_same_callbacks is	OK\n";
+
+	std::cout << "------------ D I G I T -----------\n";
+	test_with_only_digit_tokens();
+	std::cout << "test_with_only_digit_tokens is	OK" << std::endl;
+
+	std::cout << "------------ O V E R F L O W -----------\n";
+	test_overflow();
+	std::cout << "test_overflow is		OK" << std::endl;
+
+	std::cout << "------------ S T R I N G S -----------\n";
+	test_with_only_string_tokens();
+	std::cout << "test_with_only_string_tokens is	OK" << std::endl;
+	test_string_tabs();
+	std::cout << "test_string_tabs is		OK\n";
+	test_empty_string();
+	std::cout << "test_empty_string is		OK" << std::endl;
+
+	std::cout << "------------ A L L -----------\n";
+	test_one_symbol();
+	std::cout << "test_one_symbol is		OK" << std::endl;
+	test_all();
+	std::cout << "test_all is			OK\n";
 	return 0;
 }
