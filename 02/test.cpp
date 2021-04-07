@@ -148,7 +148,6 @@ void test_two_same_callbacks()
 	});
 	TokenParser.SetStringCallback([&string_found_tokens](std::string stringToken) {
 	string_found_tokens.push_back(stringToken);
-	//std::cout << stringToken << " ";
 	});
 	TokenParser.SetDigitCallback([&integer_found_tokens, &str](uint32_t digitToken) {
 	str += "2";
@@ -237,7 +236,7 @@ void test_one_symbol() {
 }
 
 int main() {
-	std::cout << "------------ T E S T S -----------\n";
+	std::cout << "-------- C A L L B A C K S -------\n";
 	test_without_callback();
 	std::cout << "test_without_callback		OK\n";
 	test_two_same_callbacks();
@@ -247,11 +246,11 @@ int main() {
 	test_with_only_digit_tokens();
 	std::cout << "test_with_only_digit_tokens is	OK" << std::endl;
 
-	std::cout << "------------ O V E R F L O W -----------\n";
+	std::cout << "-- O V E R F L O W   D I G I T ---\n";
 	test_overflow();
 	std::cout << "test_overflow is		OK" << std::endl;
 
-	std::cout << "------------ S T R I N G S -----------\n";
+	std::cout << "---------- S T R I N G S ---------\n";
 	test_with_only_string_tokens();
 	std::cout << "test_with_only_string_tokens is	OK" << std::endl;
 	test_string_tabs();
@@ -259,7 +258,7 @@ int main() {
 	test_empty_string();
 	std::cout << "test_empty_string is		OK" << std::endl;
 
-	std::cout << "------------ A L L -----------\n";
+	std::cout << "------------ A L L ---------------\n";
 	test_one_symbol();
 	std::cout << "test_one_symbol is		OK" << std::endl;
 	test_all();
