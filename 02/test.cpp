@@ -1,8 +1,4 @@
 #include "test.hpp"
-#include <vector>
-#include <iostream>
-
-#include <cassert>
 
 template <typename T>
 void assertVector(const std::vector<T> &generated, const std::vector<T> &expected) {
@@ -10,14 +6,12 @@ void assertVector(const std::vector<T> &generated, const std::vector<T> &expecte
 	assert(std::equal(generated.begin(), generated.end(), expected.begin()));
 }
 
-void test_without_callback()
-{
+void test_without_callback() {
 	TokenParser	TokenParser;
 	TokenParser.TParser("abc def 123    678    agsj");
 }
 
-void test_all()
-{
+void test_all() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
@@ -44,8 +38,7 @@ void test_all()
 	assert(str == "StartEnd");
 }
 
-void test_string_tabs()
-{
+void test_string_tabs() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
@@ -69,8 +62,7 @@ void test_string_tabs()
 	assert(str == "StartEnd");
 }
 
-void test_with_only_string_tokens()
-{
+void test_with_only_string_tokens() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
@@ -93,8 +85,7 @@ void test_with_only_string_tokens()
 	assert(str == "2222End");
 }
 
-void test_with_only_digit_tokens()
-{
+void test_with_only_digit_tokens() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
@@ -113,8 +104,7 @@ void test_with_only_digit_tokens()
 	assert(str == "StartEnd");
 }
 
-void test_with_no_start()
-{
+void test_with_no_start() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
@@ -132,8 +122,7 @@ void test_with_no_start()
 	assert(str == "End");
 }
 
-void test_two_same_callbacks()
-{
+void test_two_same_callbacks() {
 	std::string str;
 	std::vector<uint32_t> DigitFound;
 	std::vector<std::string> StringFound;
