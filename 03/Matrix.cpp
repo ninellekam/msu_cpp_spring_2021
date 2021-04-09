@@ -1,24 +1,5 @@
 #include "Matrix.hpp"
 
-const Matrix::Rows& Matrix::operator[](size_t i) const {
-	if (i >= rows)
-		throw std::out_of_range("OUT RANGE\n");
-	return *MyMatrix[i];
-}
-
-Matrix::Rows& Matrix::operator[](size_t i) {
-	if (i >= rows)
-		throw std::out_of_range("OUT RANGE\n");
-	return *MyMatrix[i];
-}
-
-void Matrix::FillMatrix(int elem) {
-	std::cout << this->rows << " " << this->columns;
-	for (size_t i = 0; i < this->rows; ++i)
-		for (size_t j = 0; j < this->columns; ++j)
-			(*MyMatrix)[i][j] = elem;
-}
-
 Matrix::Matrix(size_t rows, size_t columns): rows(rows), columns(columns) {
 	try {
 		MyMatrix = new Rows*[rows];
@@ -57,11 +38,44 @@ bool Matrix::operator==(const Matrix& obj) const {
 	return true;
 }
 
+Matrix Matrix::operator +(Matrix &obj) const {
+	if (obj.getRows() != rows || obj.getColumns() != columns) {
+		throw std::out_of_range("Different sizes!\n");
+	}
+	Matrix res(rows, columns);
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < columns; j++) {
+			res.MyMatrix[i][j] = MyMatrix[i][j] + obj.MyMatrix[i][j];
+		}
+	}
+	return res;
+}
+
 bool Matrix::operator!=(const Matrix& obj) const {
 	if (*this == obj)
 		return false;
 	else
 		return true;
+}
+
+const Matrix::Rows& Matrix::operator[](size_t i) const {
+	if (i >= rows)
+		throw std::out_of_range("OUT RANGE\n");
+	return *MyMatrix[i];
+}
+
+Matrix::Rows& Matrix::operator[](size_t i) {
+	if (i >= rows)
+		throw std::out_of_range("OUT RANGE\n");
+	return *MyMatrix[i];
+}
+
+
+void Matrix::FillMatrix(int elem) {
+	std::cout << this->rows << " " << this->columns;
+	for (size_t i = 0; i < this->rows; ++i)
+		for (size_t j = 0; j < this->columns; ++j)
+			(*MyMatrix)[i][j] = elem;
 }
 
 Matrix::~Matrix() {
