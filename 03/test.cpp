@@ -68,7 +68,7 @@ int main() {
 	TestEqualElem();
 	std::cout << "TestEqual is			OK\n";
 	TestMultiply();
-	std::cout << "TestMultiply is		OK\n";
+	std::cout << "TestMultiply is			OK\n";
 	TestNegativeRow();
 	TestNegativeColumn();
 	TestEqualMatrixDiffSizes();
