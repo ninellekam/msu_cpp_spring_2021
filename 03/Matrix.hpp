@@ -31,7 +31,7 @@ class Matrix {
 		}
 		friend std::ostream& operator<<(std::ostream &out, const Rows &row) {
 			for(size_t i = 0; i < row.len; ++i)
-				out << row.RowsArray[i] << std::endl;
+				out << row.RowsArray[i];
 			return out;
 		}
 };
@@ -39,11 +39,6 @@ class Matrix {
 		Matrix();
 		~Matrix();
 		Matrix(size_t rows, size_t columns);
-		std::ostream& operator<<(std::ostream& out) {
-			for(size_t i = 0; i < rows; i++)
-				out << *(MyMatrix[i]) << std::endl;
-			return out;
-		}
 		Rows **MyMatrix;
 		Rows & operator[](size_t i);
 		void FillMatrix(int elem);
@@ -56,7 +51,7 @@ class Matrix {
 		size_t getColumns() const { return columns; }
 		friend std::ostream& operator<<(std::ostream &out, const Matrix &m) {
 			for(size_t i = 0; i < m.rows; ++i)
-				out << m.MyMatrix[i] << std::endl;
+				out << *(m.MyMatrix[i]) << std::endl;
 			return out;
 		}
 };
