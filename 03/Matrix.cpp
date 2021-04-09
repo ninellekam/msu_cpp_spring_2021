@@ -23,18 +23,18 @@ Matrix::Matrix(size_t rows, size_t columns): rows(rows), columns(columns) {
 	try {
 		MyMatrix = new Rows*[rows];
 	}
-	catch(std::bad_alloc& ba) {
-		throw ba;
+	catch(std::bad_alloc& error) {
+		throw error;
 	}
 	for (size_t i = 0; i < rows; ++i) {
 		try {
 			MyMatrix[i] = new Rows(columns);
 		}
-		catch(std::bad_alloc& ba) {
+		catch(std::bad_alloc& error) {
 			for (size_t j = 0; j < i; ++j)
 				delete MyMatrix[j];
 			delete[] MyMatrix;
-			throw ba;
+			throw error;
 		}
 	}
 }
