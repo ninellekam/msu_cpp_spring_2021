@@ -31,7 +31,7 @@ void	TestNegativeRow() {
 		Matrix M(rows, columns);
 	}
 	catch (std::bad_alloc& ba) {
-		std::cout << "TestNegativeRow is 		OK\n";
+		std::cout << "TestNegativeRow is 	OK\n";
 	}
 }
 
@@ -68,7 +68,7 @@ int main() {
 	TestEqualElem();
 	std::cout << "TestEqual is			OK\n";
 	TestMultiply();
-	std::cout << "TestMultiply is		OK\n";
+	std::cout << "TestMultiply is			OK\n";
 	TestNegativeRow();
 	TestNegativeColumn();
 	TestEqualMatrixDiffSizes();
