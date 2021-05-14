@@ -1,14 +1,14 @@
-#ifndef THREAD_HPP
-#define THREAD_HPP
+#ifndef		THREAD_HPP
+#define		THREAD_HPP
 
-#include <iostream>
-#include <pthread.h>
-#include <future>
-#include <thread>
-#include <vector>
-#include <queue>
-#include <functional>
-#include <condition_variable>
+#include	<iostream>
+#include	<pthread.h>
+#include	<future>
+#include	<thread>
+#include	<vector>
+#include	<queue>
+#include	<functional>
+#include	<condition_variable>
 
 class ThreadPool{
 	std::mutex							my_mutex;
@@ -19,18 +19,13 @@ class ThreadPool{
 public:
 	ThreadPool(size_t SizeOfPool);
 	~ThreadPool();
-	void FuncForThread();
+	void	FuncForThread();
 	template <class Func, class... Args>
-	auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
+	auto	exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
 		typedef std::packaged_task <decltype(func(args ...))()> task_pack;
 		auto task = std::make_shared <task_pack> (std::bind(func, args...));
 		auto res = task->get_future();
 		std::unique_lock<std::mutex> lock(my_mutex);
-		// std::packaged_task <decltype(func(args ...))()> task(std::bind(func, args...));
-		// auto res = task.get_future();
-		// std::unique_lock<std::mutex> lock(m);
-		// TaskQueue.push([task](){ task(); });
-		// std::cout << typeid(*task).name() << std::endl;
 		TaskQueue.push([task](){ (*task)(); });
 		condition_var.notify_one();
 		return res;

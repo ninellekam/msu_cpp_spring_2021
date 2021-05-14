@@ -14,10 +14,6 @@ void test2(ThreadPool &pool) {
 	assert(task2.get() == 1);
 }
 
-void ok() {
-	std::cout << "l";
-}
-
 int main(){
 	ThreadPool pool(3);
 
@@ -27,8 +23,8 @@ int main(){
 	std::cout << "Test 2 is OK!\n";
 
 	for(int i = 0; i < 10; ++i){
-	    auto task = pool.exec([i](){ return i; });
-	    assert(task.get() == i);
+		auto task = pool.exec([i](){ return i; });
+		assert(task.get() == i);
 		std::cout << "Test for ID = " << i << " proccess is OK!\n";
 	}
 	return 0;
