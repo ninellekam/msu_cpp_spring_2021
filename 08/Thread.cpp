@@ -8,25 +8,25 @@ ThreadPool::~ThreadPool(){
 		}
 }
 
-void ThreadPool::work() {
+void ThreadPool::FuncForThread() {
 	while (!stop) {
 		std::unique_lock<std::mutex> lock(my_mutex);
-		if (task_queue.empty()) {
+		if (TaskQueue.empty()) {
 			condition_var.wait(lock);
 		}
 		else {
-			auto task(std::move(task_queue.front()));
-			task_queue.pop();
+			auto task(std::move(TaskQueue.front()));
+			TaskQueue.pop();
 			lock.unlock();
 			task();
 		}
 	}
 }
 
-ThreadPool::ThreadPool(size_t poolSize) {
+ThreadPool::ThreadPool(size_t SizeOfPool) {
 	stop = false;
-	for (size_t i = 0; i < poolSize; ++i) {
-		std::thread my_thread(&ThreadPool::work, this);
-		pool.emplace_back(std::move(my_thread));
+	for (size_t i = 0; i < SizeOfPool; ++i) {
+		std::thread MyThread(&ThreadPool::FuncForThread, this);
+		pool.emplace_back(std::move(MyThread));
 	}
 }
