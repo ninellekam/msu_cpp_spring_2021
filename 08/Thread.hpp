@@ -23,14 +23,15 @@ public:
 	void GoProccess();
 	template <class Func, class... Args>
 	auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
-		typedef std::packaged_task <decltype(func(args ...))()> task_pack;
-		auto task = std::make_shared <task_pack> (std::bind(func, args...));
+		using res_type = std::packaged_task <decltype(func(args ...))()>;
+		auto task = std::make_shared <res_type> (std::bind(func, args...));
 		auto res = task->get_future();
 		std::unique_lock<std::mutex> lock(MyMutex);
-		TaskQueue.push([task](){ (*task)(); });
+		std::function<void()> my_func = [task](){ (*task)(); };
+		TaskQueue.push(my_func);
 		ConditionVar.notify_one();
 		return res;
-}
+	}
 };
 
 #endif
