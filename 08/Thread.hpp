@@ -11,9 +11,9 @@
 #include <condition_variable>
 
 class ThreadPool{
-	std::mutex							m;
+	std::mutex							my_mutex;
 	std::vector<std::thread>			pool;
-	std::condition_variable				cond;
+	std::condition_variable				condition_var;
 	std::queue<std::function<void()>>	task_queue;
 	std::atomic<bool>					stop;
 public:
@@ -23,12 +23,16 @@ public:
 	template <class Func, class... Args>
 	auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
 		typedef std::packaged_task <decltype(func(args ...))()> task_pack;
-		// auto task = std::make_shared <std::packaged_task <decltype(func(args...))()> > (std::bind(func, args...));
 		auto task = std::make_shared <task_pack> (std::bind(func, args...));
 		auto res = task->get_future();
-		std::unique_lock<std::mutex> lock(m);
+		std::unique_lock<std::mutex> lock(my_mutex);
+		// std::packaged_task <decltype(func(args ...))()> task(std::bind(func, args...));
+		// auto res = task.get_future();
+		// std::unique_lock<std::mutex> lock(m);
+		// task_queue.push([task](){ task(); });
+		// std::cout << typeid(*task).name() << std::endl;
 		task_queue.push([task](){ (*task)(); });
-		cond.notify_one();
+		condition_var.notify_one();
 		return res;
 	}
 };

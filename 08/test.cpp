@@ -1,9 +1,5 @@
 #include "test.hpp"
 
-struct A {
-	int value;
-};
-
 int foo(const A& a) {
 	return a.value;
 }
@@ -16,6 +12,10 @@ void test1(ThreadPool &pool) {
 void test2(ThreadPool &pool) {
 	auto task2 = pool.exec([]() { return 1; });
 	assert(task2.get() == 1);
+}
+
+void ok() {
+	std::cout << "l";
 }
 
 int main(){
