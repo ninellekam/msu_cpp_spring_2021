@@ -1,4 +1,4 @@
-#include "test.hpp"
+#include "Test.hpp"
 
 int foo(const A& a) {
 	return a.value;
@@ -16,12 +16,10 @@ void test2(ThreadPool &pool) {
 
 int main(){
 	ThreadPool pool(3);
-
 	test1(pool);
 	std::cout << "Test 1 is OK!\n";
 	test2(pool);
 	std::cout << "Test 2 is OK!\n";
-
 	for(int i = 0; i < 10; ++i){
 		auto task = pool.exec([i](){ return i; });
 		assert(task.get() == i);

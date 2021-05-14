@@ -7,29 +7,30 @@
 #include	<thread>
 #include	<vector>
 #include	<queue>
+#include	<unistd.h>
 #include	<functional>
 #include	<condition_variable>
 
 class ThreadPool{
-	std::mutex							my_mutex;
+	std::mutex							MyMutex;
 	std::vector<std::thread>			pool;
-	std::condition_variable				condition_var;
+	std::condition_variable				ConditionVar;
 	std::queue<std::function<void()>>	TaskQueue;
 	std::atomic<bool>					stop;
 public:
 	ThreadPool(size_t SizeOfPool);
 	~ThreadPool();
-	void	FuncForThread();
+	void GoProccess();
 	template <class Func, class... Args>
-	auto	exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
+	auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
 		typedef std::packaged_task <decltype(func(args ...))()> task_pack;
 		auto task = std::make_shared <task_pack> (std::bind(func, args...));
 		auto res = task->get_future();
-		std::unique_lock<std::mutex> lock(my_mutex);
+		std::unique_lock<std::mutex> lock(MyMutex);
 		TaskQueue.push([task](){ (*task)(); });
-		condition_var.notify_one();
+		ConditionVar.notify_one();
 		return res;
-	}
+}
 };
 
 #endif
