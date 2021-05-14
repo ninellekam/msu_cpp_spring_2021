@@ -24,8 +24,9 @@ public:
 	template <class Func, class... Args>
 	auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
 		using res_type = std::packaged_task <decltype(func(args ...))()>;
-		auto task = std::make_shared <res_type> (std::bind(func, args...));
-		auto res = task->get_future();
+		// auto task = std::make_shared <res_type> (std::bind(func, args...));
+		auto task = res_type (std::bind(func, args...));
+		auto res = task.get_future();
 		std::unique_lock<std::mutex> lock(MyMutex);
 		std::function<void()> my_func = [task](){ (*task)(); };
 		TaskQueue.push(my_func);
