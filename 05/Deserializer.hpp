@@ -1,5 +1,8 @@
-#include <iostream>
-#include "Error.hpp"
+#ifndef		DESERIALIZER_HPP
+#define		DESERIALIZER_HPP
+
+#include	<iostream>
+#include	"Error.hpp"
 
 class Deserializer{
 	std::istream& in_;
@@ -73,3 +76,5 @@ public:
 			}
 	}
 };
+
+#endif

@@ -1,5 +1,8 @@
-#include <iostream>
-#include "Error.hpp"
+#ifndef		SERIALIZER_HPP
+#define		SERIALIZER_HPP
+
+#include	<iostream>
+#include	"Error.hpp"
 
 class Serializer{
 	static constexpr char Separator = ' ';
@@ -46,3 +49,5 @@ public:
 		return Error::NoError;
 	}
 };
+
+#endif
