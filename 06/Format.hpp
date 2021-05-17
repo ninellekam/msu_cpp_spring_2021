@@ -30,17 +30,17 @@ std::string format(const std::string& format_str, argsT&&... args) {
 				}
 				--i;
 				if (i == format_str.size() - 1)
-					throw std::runtime_error("Error Bracket!\n");
+					throw std::invalid_argument("Error Bracket!\n");
 			}
 			else {
 				if (format_str[i] != '}')
-					throw std::runtime_error("Error Bracket!\n");
+					throw std::invalid_argument("Error Bracket!\n");
 				if (str_tmp.empty())
 					throw std::runtime_error("Empty buffer!\n");
 				else {
 					size_t index = atoi(str_tmp.c_str());
 					if (index > arguments.size() - 1)
-						throw std::runtime_error("Out of range!\n");
+						throw std::overflow_error("Out of range!\n");
 					else {
 						result_str += arguments[index];
 						str_tmp.clear();
