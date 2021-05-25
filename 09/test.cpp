@@ -16,7 +16,7 @@ void TestReverse() {
 	bool catching = false;
 
 	try {
-		mysort("bin.dat", "out.dat");
+		Sort("bin.dat", "out.dat");
 
 		InFile.open("out.dat", std::ios::binary);
 
@@ -53,7 +53,7 @@ void TestSorted() {
 	bool catching = false;
 
 	try {
-		mysort("bin.dat", "out.dat");
+		Sort("bin.dat", "out.dat");
 
 		InFile.open("out.dat", std::ios::binary);
 		for (uint64_t i = 0; i < FileCount; ++i) {

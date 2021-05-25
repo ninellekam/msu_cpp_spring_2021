@@ -8,7 +8,7 @@ struct positional_value
 	}
 };
 
-void sort(std::mutex& mut, std::ifstream& input, std::ofstream& tmp, size_t buf_size)
+void Sort_tmp(std::mutex& mut, std::ifstream& input, std::ofstream& tmp, size_t buf_size)
 {
 	std::unique_ptr<uint64_t[]> arr(new uint64_t[buf_size / sizeof(uint64_t)]);
 	for (;;) {
@@ -32,7 +32,7 @@ void sort(std::mutex& mut, std::ifstream& input, std::ofstream& tmp, size_t buf_
 	}
 };
 
-void mysort(const std::string& input_path, const std::string& output_path)
+void Sort(const std::string& input_path, const std::string& output_path)
 {
 	size_t buf_size = 8388608;
 
@@ -49,7 +49,7 @@ void mysort(const std::string& input_path, const std::string& output_path)
 
 	std::mutex mut;
 
-	auto sort_function = std::bind(sort, std::ref(mut), std::ref(input), std::ref(tmp), buf_size);
+	auto sort_function = std::bind(Sort_tmp, std::ref(mut), std::ref(input), std::ref(tmp), buf_size);
 
 	std::thread th1 (sort_function);
 	std::thread th2 (sort_function);

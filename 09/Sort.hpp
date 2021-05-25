@@ -14,7 +14,7 @@
 
 #pragma		once
 
-void		sort(std::mutex& mut, std::ifstream& input, std::ofstream& tmp, size_t buf_size);
-void		mysort(const std::string& input_path, const std::string& output_path);
+void		Sort_tmp(std::mutex& mut, std::ifstream& input, std::ofstream& tmp, size_t buf_size);
+void		Sort(const std::string& input_path, const std::string& output_path);
 
 #endif

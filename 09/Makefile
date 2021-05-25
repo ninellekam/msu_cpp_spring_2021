@@ -3,7 +3,7 @@ FLAGS = -std=c++17 -g
 
 re: fclean all
 
-all: test
+all: Sort.o test.o
 
 test: Sort.o test.o
 	@$(CC) $(FLAGS) -o test test.o Sort.o -pthread
