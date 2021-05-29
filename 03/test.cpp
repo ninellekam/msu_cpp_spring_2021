@@ -5,7 +5,7 @@
 #include <cstring>
 
 
-void GetRowColTest() {
+void RowColTest() {
 	const size_t rows = 2;
 	const size_t cols = 3;
 	Matrix MTRX(rows,cols);
@@ -16,7 +16,7 @@ void GetRowColTest() {
 	assert(x == 10);
 }
 
-void GetElTest() {
+void ElTest() {
 	const size_t rows = 4;
 	const size_t cols = 2;
 	Matrix MTRX(rows, cols);
@@ -69,7 +69,7 @@ void CheckTest() {
 	}
 }
 
-void PlusTest() {
+void TestSum() {
 	const size_t rows = 5;
 	const size_t cols = 5;
 	Matrix MTRX(rows, cols);
@@ -169,15 +169,15 @@ void 	OutTest() {
 int main() {
 	OutTest();
 	std::cout<<"OK!\n"<<std::endl;
-	GetRowColTest();
+	TestSum();
 	std::cout<<"OK!\n"<<std::endl;
-	GetElTest();
+	RowColTest();
+	std::cout<<"OK!\n"<<std::endl;
+	ElTest();
 	std::cout<<"OK!\n"<<std::endl;
 	MulTest();
 	std::cout<<"OK!\n"<<std::endl;
 	CheckTest();
-	std::cout<<"OK!\n"<<std::endl;
-	PlusTest();
 	std::cout<<"OK!\n"<<std::endl;
 	EqualTest();
 	std::cout<<"OK!\n"<<std::endl;
