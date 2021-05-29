@@ -18,12 +18,6 @@ int32_t& Matrix::MyVector::operator[](const size_t i)
 	else return MyVec[i];
 }
 
-//void Matrix::MyVector::operator=(const MyVector Vec)
-//{
-//	MyVec = Vec.MyVec;
-//	std::cout<<"operator= hello!"<<std::endl;
-//}
-
 const Matrix::MyVector  Matrix::operator[](const size_t i) const
 {
 	if (i > columns) throw std::out_of_range("");
@@ -150,7 +144,7 @@ std::ostream& operator<< (std::ostream& out, const Matrix& point)
 	{
 		for (size_t j = 0; j < point.rows; j++)
 		{
-			out << point[i][j]<<'|';
+			out << point[i][j]<<' ';
 
 		}
 		out <<'\n';

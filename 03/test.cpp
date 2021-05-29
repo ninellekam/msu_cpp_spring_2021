@@ -154,7 +154,21 @@ void ExceptionTest() {
 	assert(catching);
 }
 
+void 	OutTest() {
+	const size_t rows = 5;
+	const size_t cols = 9;
+	Matrix MTRX(rows, cols);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			MTRX[i][j] = 1;
+		}
+	}
+	std::cout << MTRX;
+}
+
 int main() {
+	OutTest();
+	std::cout<<"OK!\n"<<std::endl;
 	GetRowColTest();
 	std::cout<<"OK!\n"<<std::endl;
 	GetElTest();

@@ -18,7 +18,6 @@ class Matrix
 			MyVector(int* Vec, const size_t N);
 			int32_t& operator[](const size_t i);
 			const  int32_t& operator[](const size_t i) const;
-			//void operator=(const MyVector Vec);
 		};
 		MyVector operator[](const size_t i);
 		const MyVector  operator[](const size_t i) const;
@@ -27,7 +26,6 @@ class Matrix
 		const size_t getRows() const;
 		const size_t getColumns() const;
 		Matrix operator=(Matrix A);
-		//void operator=(Matrix& A);
 		Matrix operator+(const Matrix& A) const;
 		Matrix operator*=(const  int32_t a);
 		bool operator==(const Matrix A) const;
