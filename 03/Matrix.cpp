@@ -1,85 +1,169 @@
 #include "Matrix.hpp"
 
-Matrix::Matrix(size_t rows, size_t columns): rows(rows), columns(columns) {
-	try {
-		MyMatrix = new Rows*[rows];
+Matrix::MyVector::MyVector(int32_t* Vec, const size_t N)
+{
+	len = N;
+	MyVec = Vec;
+}
+
+Matrix::MyVector Matrix:: operator[](const size_t i)
+{
+	if (i > columns) throw std::out_of_range("");
+	else return MyVector(matrix[i], rows);
+}
+
+int32_t& Matrix::MyVector::operator[](const size_t i)
+{
+	if (i > len) throw std::out_of_range("");
+	else return MyVec[i];
+}
+
+//void Matrix::MyVector::operator=(const MyVector Vec)
+//{
+//	MyVec = Vec.MyVec;
+//	std::cout<<"operator= hello!"<<std::endl;
+//}
+
+const Matrix::MyVector  Matrix::operator[](const size_t i) const
+{
+	if (i > columns) throw std::out_of_range("");
+	else return MyVector(matrix[i], rows);
+}
+
+const  int32_t& Matrix::MyVector::operator[](const size_t i) const
+{
+	if (i > this->len) throw std::out_of_range("");
+	else return this->MyVec[i];
+
+}
+
+Matrix::Matrix(const size_t i,const size_t j)
+{
+	this->columns = i;
+	this->rows = j;
+	this->matrix = new  int32_t* [i];
+	for (size_t k = 0; k < i; k++)
+	{
+		this->matrix[k] = new  int32_t[j];
 	}
-	catch(std::bad_alloc& error) {
-		throw error;
+}
+
+Matrix::Matrix(const Matrix& A)
+{
+	columns = A.columns;
+	rows = A.rows;
+	matrix = new  int32_t* [columns];
+	for (size_t k = 0; k < columns; k++)
+	{
+		this->matrix[k] = new  int32_t[rows];
 	}
-	for (size_t i = 0; i < rows; ++i) {
-		try {
-			MyMatrix[i] = new Rows(columns);
+	for (size_t i = 0; i < columns; i++)
+	{
+		for (size_t j = 0; j < rows; j++)
+		{
+			matrix[i][j] = A.matrix[i][j];
 		}
-		catch(std::bad_alloc& error) {
-			for (size_t j = 0; j < i; ++j)
-				delete MyMatrix[j];
-			delete[] MyMatrix;
-			throw error;
-		}
 	}
 }
 
-void Matrix::operator*=(int elem) {
-	for (size_t i = 0; i < rows; ++i)
-		for (size_t j = 0; j < columns; ++j)
-			(*MyMatrix)[i][j] *= elem;
+const size_t Matrix::getRows() const
+{
+	return columns;
 }
 
-bool Matrix::operator==(const Matrix& obj) const {
-	if (this == &obj)
-		return true;
-	if (obj.getColumns() != columns || obj.getRows() != rows)
-		return false;
-	for (size_t i = 0; i < rows; ++i)
-		for (size_t j = 0; j < columns; ++j)
-			if ((*MyMatrix)[i][j] != obj[i][j])
-				return false;
-	return true;
+const size_t Matrix::getColumns() const
+{
+	return rows;
 }
 
-Matrix Matrix::operator +(Matrix &obj) const {
-	if (obj.getRows() != rows || obj.getColumns() != columns) {
-		throw std::out_of_range("Different sizes!\n");
+Matrix Matrix::operator=(Matrix A)
+{
+	if (this->columns != A.columns || rows != A.rows)
+	{
+		throw std::out_of_range("");
 	}
-	Matrix res(rows, columns);
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < columns; j++) {
-			res.MyMatrix[i][j] = MyMatrix[i][j] + obj.MyMatrix[i][j];
-		}
-	}
-	return res;
-}
-
-bool Matrix::operator!=(const Matrix& obj) const {
-	if (*this == obj)
-		return false;
 	else
+	{
+		for (size_t i = 0; i < columns; ++i)
+		{
+			for (size_t j = 0; j < rows; ++j)
+			{
+				this->matrix[i][j] = A[i][j];
+			}
+		}
+	}
+	return *this;
+}
+
+Matrix Matrix::operator+(const Matrix& A) const
+{
+    if (columns != A.columns || rows != A.rows) throw std::out_of_range("!");
+    Matrix MTRX_LOCAL(rows, columns);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            MTRX_LOCAL[i][j] = this->matrix[i][j] + A[i][j];
+        }
+    }
+    return MTRX_LOCAL;
+}
+
+Matrix Matrix:: operator*=(const  int32_t a)
+{
+	for (size_t i = 0; i < columns; i++)
+	{
+		for (size_t j = 0; j < rows; j++)
+		{
+			this->matrix[i][j] *= a;
+		}
+	}
+	return *this;
+}
+
+bool Matrix::operator==(const Matrix A) const
+{
+	if (columns != A.columns || rows != A.rows) return false;
+	else
+	{
+		for (size_t i = 0; i < columns; ++i)
+		{
+			for (size_t j = 0; j < rows; ++j)
+			{
+				if (matrix[i][j] != A[i][j])
+				{
+					return false;
+				}
+			}
+		}
 		return true;
+	}
 }
 
-const Matrix::Rows& Matrix::operator[](size_t i) const {
-	if (i >= rows)
-		throw std::out_of_range("OUT RANGE\n");
-	return *MyMatrix[i];
+bool Matrix::operator!=(const Matrix A) const
+{
+	if (columns != A.columns || rows != A.rows) return false;
+	else return !(*this == A);
 }
 
-Matrix::Rows& Matrix::operator[](size_t i) {
-	if (i >= rows)
-		throw std::out_of_range("OUT RANGE\n");
-	return *MyMatrix[i];
+std::ostream& operator<< (std::ostream& out, const Matrix& point)
+{
+	for (size_t i = 0; i < point.columns; i++)
+	{
+		for (size_t j = 0; j < point.rows; j++)
+		{
+			out << point[i][j]<<'|';
+
+		}
+		out <<'\n';
+	}
+	return out;
 }
 
-
-void Matrix::FillMatrix(int elem) {
-	std::cout << this->rows << " " << this->columns;
-	for (size_t i = 0; i < this->rows; ++i)
-		for (size_t j = 0; j < this->columns; ++j)
-			(*MyMatrix)[i][j] = elem;
-}
-
-Matrix::~Matrix() {
-	for (size_t j = 0; j < rows; ++j)
-		delete MyMatrix[j];
-	delete[] MyMatrix;
+Matrix::~Matrix()
+{
+	for (size_t i = 0; i < columns; i++)
+	{
+		delete[] matrix[i];
+	}
+	delete[] matrix;
+	matrix = nullptr;
 }
