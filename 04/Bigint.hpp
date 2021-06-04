@@ -1,42 +1,45 @@
 #ifndef		BIGINT_HPP
 #define		BIGINT_HPP
+#pragma 	once
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
 
-#include	<iostream>
-#include	<vector>
-#include	<stdlib.h>
-#include	<stdio.h>
-
-
-class BigInt {
-	size_t	len;
-	int32_t	*data;
-	int32_t neg;
+class BigInt
+{
+    uint16_t* Data;
+    size_t Len;
+    bool sign;
 public:
-	BigInt();
-	BigInt(const std::string &str);
-	BigInt(int32_t number);
-	BigInt(const BigInt &object);
-	BigInt(BigInt &&object);
-
-	BigInt& adder(const char *data, size_t len, const char *object_data, size_t object_len);
-	BigInt& minuser(const char *data, size_t len, const char *object_data, size_t object_len);
-	BigInt&	operator=(const BigInt &object);
-	BigInt& operator=(BigInt &&object);
-	BigInt& operator-(const BigInt &object) const;
-	BigInt& operator+(const BigInt &object);
-	BigInt& operator*(const BigInt &object) const;
-	BigInt&	operator-();
-
-	bool	operator>(const BigInt &object) const;
-	bool	operator<(const BigInt &object) const;
-	bool	operator>=(const BigInt &object) const;
-	bool	operator!=(const BigInt &object) const;
-	bool	operator<=(const BigInt &object) const;
-
-	friend std::ostream& operator<<(std::ostream & os, const BigInt & obj);
-	friend bool operator==(const BigInt & obj1, const BigInt & obj2);
-	char * copy_str(size_t i, size_t len, char *tmp, char *data);
-	~BigInt();
+    BigInt();
+    BigInt(const BigInt& A); // Copy constructor
+    BigInt(const int32_t& A);
+    BigInt(BigInt&& A); // Move constructor
+    BigInt(std::string& str);
+    BigInt(std::string&& str);// Move constructor
+	std::string to_string();
+    BigInt& operator=(BigInt&& A); //Move operator
+    BigInt& operator=(const BigInt& A); // Copy operator
+    BigInt& operator=(const int32_t& A); //Copy operator
+    BigInt& operator=(const int32_t&& A); //Move operator
+    void abs_plus(const BigInt& A, const BigInt& B);
+    void abs_minus(const BigInt& A, const BigInt& B);
+    BigInt operator-();
+    BigInt operator+(const BigInt& A) const;
+    BigInt operator+(const int32_t& A) const; // new
+    BigInt operator-(const BigInt& A) const;
+    BigInt operator-(const int32_t& A) const; // new
+    BigInt operator*(const BigInt& A) const; //  new
+    BigInt operator*(const int32_t& A) const; // new
+    bool operator>(const BigInt& A) const;
+    bool operator<(const BigInt& A) const;
+    bool operator>=(const BigInt& A) const;
+    bool operator<=(const BigInt& A) const;
+    bool operator==(const BigInt& A) const;
+    bool operator!=(const BigInt& A) const;
+    size_t getLen() const;
+    friend std::ostream& operator<< (std::ostream& out, const BigInt& point);
+    friend std::ostream& operator<< (std::ostream& out, const BigInt&& point);
+    ~BigInt();
 };
-
 #endif
