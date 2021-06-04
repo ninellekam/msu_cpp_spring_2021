@@ -7,6 +7,14 @@
 #include	<initializer_list>
 #include	<unistd.h>
 
+struct FormatError: public std::exception
+{
+	const char * what () const throw ()
+    {
+    	return "invalid format";
+    }
+};
+
 template <class T>
 std::string to_str(T&& x) {
 	std::stringstream s;
